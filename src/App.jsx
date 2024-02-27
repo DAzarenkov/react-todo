@@ -15,11 +15,11 @@ function App() {
   return (
     <>
       <h1>Todo List</h1>
-      <u>
+      <ul>
         {todoList.map(function (listItem) {
-          return <li key={listItem.ids}>{listItem.title}</li>
+          return <li key={listItem.id}>{listItem.title}</li>
         })}
-      </u>
+      </ul>
     </>
   )
 }
