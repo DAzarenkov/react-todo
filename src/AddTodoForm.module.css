@@ -1,0 +1,21 @@
+.Form {
+    margin-bottom: 32px;
+}
+
+.Button {
+    background-color: var(--accent-primary);
+    color: var(--accent-secondary);
+    border: 1px solid var(--accent-primary);
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 1;
+    padding: 13px 16px;
+}
+
+@media all and (max-width: 480px) {
+    .Button {
+        display: block;
+        width: 100%;
+        padding: 6px 10px;
+    }
+}
