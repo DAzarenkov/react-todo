@@ -1,8 +1,13 @@
+import style from "./TodoListItem.module.css";
+import IconBin from "./assets/images/icon_bin.svg?react";
+
 function TodoListItem({todo, onRemoveTodo}) {
   return (
-    <li>
+    <li className={style.ListItem}>
       {todo.title}
-      <button type="button" onClick={() => {onRemoveTodo(todo.id)}}>Remove</button>
+      <button className={style.RemoveButton} type="button" onClick={() => {onRemoveTodo(todo.id)}}>
+        <IconBin />
+      </button>
     </li>
   )
 }

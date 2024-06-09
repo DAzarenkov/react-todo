@@ -1,8 +1,8 @@
-import './App.css';
 import TodoList from "./TodoList.jsx";
 import AddTodoForm from "./AddTodoForm.jsx";
 import {Fragment, useEffect, useState} from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
+import style from "./App.module.css";
 
 function App() {
 
@@ -113,7 +113,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Fragment>
-          <h1>Todo List</h1>
+          <h1 className={style.Title}>Todo List</h1>
           <AddTodoForm onAddTodo={addTodo}/>
           {isLoading ? (
             <p>Loading...</p>
