@@ -28,6 +28,17 @@ function App() {
       }
 
       let data = await response.json();
+
+      data.records.sort((objectA , objectB) => {
+        if (objectA.fields.title < objectB.fields.title) {
+          return 1;
+        } else if (objectA.fields.title > objectB.fields.title) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+
       let todos = data.records.map((todo) => {
         return {
           title: todo.fields.title,
