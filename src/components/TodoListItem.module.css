@@ -12,18 +12,23 @@
 }
 
 .RemoveButton {
-    width: 29px;
     height: 29px;
+    vertical-align: middle;
     text-align: center;
     padding: 5px;
     border-radius: 4px;
     border: 1px solid var(--accent-primary);
+    color: var(--accent-primary);
     background-color: transparent;
-    transition: background-color 0.25s;
+    transition-property: background-color, color;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
     margin-left: 10px;
+    white-space: nowrap;
 
     &:hover, &:focus {
         background-color: var(--accent-primary);
+        color: var(--accent-secondary);
 
         svg {
             stroke: var(--accent-secondary);
@@ -35,6 +40,9 @@
         height: 14px;
         stroke: var(--accent-primary);
         transition: stroke 0.25s;
+        margin-right: 5px;
+        position: relative;
+        top: 2px;
     }
 }
 

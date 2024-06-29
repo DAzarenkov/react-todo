@@ -3,11 +3,21 @@ import AddTodoForm from "./components/AddTodoForm.jsx";
 import {Fragment, useEffect, useState} from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import style from "./App.module.css";
+import SortButton from "./components/SortButton.jsx";
 
 function App() {
 
   const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentSort, setCurrentSort] = useState({
+    column: 'title',
+    direction: 'desc'
+  });
+
+  const sortLabels = [
+    "title",
+    "date",
+  ];
 
   const fetchData = async () => {
 
@@ -18,7 +28,12 @@ function App() {
       }
     };
 
-    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+    let urlParams = `?view=Grid%20view&sort[0][field]=${currentSort.column}&sort[0][direction]=${currentSort.direction}`;
+    if (currentSort.column === 'date') {
+      urlParams = `?view=Grid%20view`;
+    }
+
+    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}${urlParams}`;
 
     try {
       const response = await fetch(url, options);
@@ -28,6 +43,22 @@ function App() {
       }
 
       let data = await response.json();
+
+      // Sort with JavaScript (it was in the task, but it is no longer needed)
+      // data.records.sort((objectA, objectB) => {
+      //   if (objectA.fields.title < objectB.fields.title) {
+      //     return 1;
+      //   } else if (objectA.fields.title > objectB.fields.title) {
+      //     return -1;
+      //   } else {
+      //     return 0;
+      //   }
+      // });
+
+      if (currentSort.column === 'date' && currentSort.direction === 'desc') {
+        data.records.reverse();
+      }
+
       let todos = data.records.map((todo) => {
         return {
           title: todo.fields.title,
@@ -81,7 +112,7 @@ function App() {
         };
       });
 
-      setTodoList([...todoList, ...newTodo]);
+      //setTodoList([...todoList, ...newTodo]);
     } catch (error) {
       console.log(error.message)
     }
@@ -89,7 +120,7 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentSort]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -98,9 +129,13 @@ function App() {
   }, [todoList]);
 
   const addTodo = (newTodo) => {
-    //setTodoList([...todoList, newTodo]);
+    if (newTodo.title.trim() !== "") {
+      //setTodoList([...todoList, newTodo]);
 
-    storeData(newTodo);
+      storeData(newTodo).then(()=>{
+        fetchData();
+      });
+    }
   };
 
   const removeTodo = (id) => {
@@ -108,6 +143,13 @@ function App() {
       return todoItem.id !== id;
     }));
   };
+
+  const onSort = (column, direction) => {
+    setCurrentSort({
+      column: column,
+      direction: direction
+    });
+  }
 
   return (
     <BrowserRouter>
@@ -118,7 +160,15 @@ function App() {
           {isLoading ? (
             <p>Loading...</p>
           ) : (
-            <TodoList todoList={todoList} onRemoveTodo={removeTodo}/>
+            <>
+              <div className={style.SortContainer}>
+                {sortLabels.map((sortLabel) => {
+                  return (<SortButton key={sortLabel} onSort={onSort} label={sortLabel}
+                                      currentDirection={currentSort.column === sortLabel ? currentSort.direction : ''}/>);
+                })}
+              </div>
+              <TodoList todoList={todoList} onRemoveTodo={removeTodo}/>
+            </>
           )}
         </Fragment>}/>
         <Route path="/new" element={<h1>New Todo List</h1>}/>

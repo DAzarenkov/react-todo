@@ -1,0 +1,16 @@
+
+.Button {
+    background-color: var(--background-secondary);
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    padding: 5px 16px;
+    margin: 5px;
+    transition: color 0.2s ease;
+    min-width: 140px;
+    text-align: left;
+
+    &:hover, &:focus {
+        color: var(--accent-primary);
+    }
+}
